@@ -1,5 +1,7 @@
 # 🔒 VPC Networking: Street vs. Private Office
 
+> ⚠️ **Superseded — GCP design.** VPC connectors applied to the GCP deployment, which no longer exists. Kept for historical reference only — see the [root README](../README.md).
+
 This document explains the networking architecture of the project in simple terms, focusing on the **VPC (Virtual Private Cloud)** and the **VPC Connector**.
 
 ---

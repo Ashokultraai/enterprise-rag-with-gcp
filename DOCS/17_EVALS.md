@@ -1,5 +1,7 @@
 # 17 — Evaluating RAG Systems
 
+> 🚧 **Roadmap — not yet implemented.** No evaluation suite is wired up yet. Kept as design reference — see the [root README](../README.md).
+
 > **One-line summary:** Evals are automated tests that measure whether your RAG pipeline is actually giving correct, grounded, and relevant answers — before users tell you it isn't.
 
 ---

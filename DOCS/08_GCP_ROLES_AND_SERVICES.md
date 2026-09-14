@@ -1,5 +1,7 @@
 # 🏢 GCP Roles & Services Deep-Dive
 
+> ⚠️ **Superseded — GCP design.** No longer applies; the project runs with no GCP services. Kept for historical reference only — see the [root README](../README.md).
+
 This document explains **why** we use specific Google Cloud services and **when** specific permissions are required.
 
 ---

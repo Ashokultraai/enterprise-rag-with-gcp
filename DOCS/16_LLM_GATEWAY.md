@@ -1,5 +1,7 @@
 # 16 — LLM Gateway with Portkey
 
+> 🚧 **Roadmap — Portkey not active.** LLM calls go **directly to Groq** today. `app/llm/client.py` contains a Portkey seam that activates automatically when `PORTKEY_API_KEY` is set — no node changes needed. Kept as design reference — see the [root README](../README.md).
+
 > **One-line summary:** An LLM Gateway is a proxy layer that sits between your application and any LLM provider — adding resilience, observability, and cost control with zero changes to your business logic.
 
 ---

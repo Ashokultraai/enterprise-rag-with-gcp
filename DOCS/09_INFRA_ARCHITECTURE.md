@@ -1,5 +1,7 @@
 # ☁️ Infrastructure Architecture
 
+> ⚠️ **Superseded — GCP design.** Describes the original 3-tier GCP cloud blueprint. The project migrated to a **local-first, no-GCP** stack (Docker / Hugging Face Spaces). Kept for historical reference only — see the [root README](../README.md).
+
 This project is built on a **3-Tier Cloud Architecture** designed to separate the concerns of User Interaction, Intelligence, and Data.
 
 ---

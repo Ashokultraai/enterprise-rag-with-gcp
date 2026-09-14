@@ -1,5 +1,7 @@
 # ⚡ FlashRank: Ultra-Fast Local Reranking
 
+> ✅ **Current.** FlashRank runs locally exactly as described (`app/services/retrieval/reranking_service.py`). Last updated 2026-09-14.
+
 This document explains the mechanism behind **FlashRank**, the semantic reranking engine used in our Retriever node to ensure high-fidelity responses without the cost of cloud-based ranking APIs.
 
 ---

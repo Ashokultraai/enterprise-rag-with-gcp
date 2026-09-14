@@ -1,5 +1,7 @@
 # 🚀 Deployment Strategy
 
+> ⚠️ **Superseded — GCP design.** Describes Cloud Build / Cloud Run deployment. The project now deploys via **Docker Compose** (local) or a **single-container Hugging Face Space** — see the deploy section of the [root README](../README.md).
+
 The project uses a **Cloud-Native CI/CD pipeline** that eliminates the need for local Docker installations. All builds and deployments happen directly on Google Cloud infrastructure.
 
 ---

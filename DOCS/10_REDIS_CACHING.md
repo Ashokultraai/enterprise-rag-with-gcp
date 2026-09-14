@@ -1,5 +1,7 @@
 # Redis Semantic Caching & Memory
 
+> 🚧 **Roadmap — not yet implemented.** Conversation memory currently uses LangGraph's in-process `MemorySaver`; there is no Redis layer yet. Kept as design reference — see the [root README](../README.md).
+
 ## 🚀 Overview
 The Redis layer (GCP Memorystore) provides two critical functions: **Performance Caching** and **Conversation Memory**.
 

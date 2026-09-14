@@ -1,5 +1,7 @@
 # 🛠️ GCP Production Setup
 
+> ⚠️ **Superseded — GCP design.** Describes the original Google Cloud architecture. The project migrated to a **local-first, no-GCP** stack (local `sentence-transformers` embeddings, `pypdf` parsing, local file storage, Docker / Hugging Face Spaces). Kept for historical reference only — see the [root README](../README.md).
+
 This guide details the manual and automated steps required to provision the Google Cloud environment for the Enterprise RAG Platform.
 
 ---

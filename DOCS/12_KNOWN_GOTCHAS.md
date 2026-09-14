@@ -1,5 +1,7 @@
 # ⚠️ Known Gotchas & Architectural Decisions
 
+> ⚠️ **Partially superseded.** Many gotchas here are GCP-specific and no longer apply after the local-first migration. Last updated 2026-09-14.
+
 When building an Enterprise-grade system on Google Cloud, you will encounter specific platform quirks. This document tracks those "gotchas" and explains why our architecture is designed the way it is.
 
 ---

@@ -1,5 +1,7 @@
 # 18 — Evaluation Pipeline
 
+> 🚧 **Roadmap — not yet implemented.** No evaluation pipeline is wired up yet. Kept as design reference — see the [root README](../README.md).
+
 ## What is an Evaluation and Why Does It Matter?
 
 Building a RAG system is not the same as knowing it works.

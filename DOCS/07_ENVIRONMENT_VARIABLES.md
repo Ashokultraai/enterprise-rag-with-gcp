@@ -1,5 +1,7 @@
 # 🔑 Environment Variables & Configuration
 
+> ⚠️ **Partially superseded.** The GCP variables below are no longer used. The running system needs only `GROQ_API_KEY`, `QDRANT_API_KEY`, `QDRANT_CLUSTER_ENDPOINT` (plus optional `GROQ_MODEL`, `GROQ_FAST_MODEL`, `LOGFIRE_TOKEN`). Last updated 2026-09-14.
+
 The project uses a `.env` file for local development and **GCP Secrets/Env Vars** for production. All configuration is managed via **Pydantic Settings** for strict type safety.
 
 ---

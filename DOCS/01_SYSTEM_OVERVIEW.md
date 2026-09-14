@@ -1,6 +1,8 @@
 # 🤖 Enterprise Agentic RAG: System Overview
 
-A production-grade, state-of-the-art RAG system built for speed, scalability, and deep observability. This platform leverages **LangGraph** to handle complex reasoning and **Google Cloud** to handle massive data scales.
+> ✅ **Current** — reflects the running system (local-first, post-GCP migration). Last updated 2026-09-14.
+
+A pragmatic agentic RAG system built for grounded answers and observability. It leverages **LangGraph** for multi-step reasoning and runs **fully local/free for compute** — CPU embeddings and reranking — using only **Qdrant Cloud** (vectors) and **Groq** (LLM) as hosted services. No GCP.
 
 ---
 
@@ -9,7 +11,7 @@ Most RAG systems fail because they treat every query the same. Our **Agentic RAG
 1.  **Conversational Queries**: "Hi", "Who are you?", "What did I just say?"
 2.  **Technical Queries**: "How do I configure Intel SRIOV on Kubernetes?"
 
-By using a **Planner-Retriever-Responder** architecture, we ensure that technical answers are always grounded in "True Data" while conversational interactions remain fluid and fast.
+By using a **Guardrail → Planner → Retriever → Grader → Responder** graph, technical answers stay grounded in retrieved context (with a self-correction retry, and an honest "not in the knowledge base" when coverage is missing), while conversational interactions remain fluid and fast.
 
 ---
 
@@ -18,7 +20,7 @@ By using a **Planner-Retriever-Responder** architecture, we ensure that technica
 sequenceDiagram
     participant User
     participant UI as Streamlit UI
-    participant Agent as Agent Brain (Cloud Run)
+    participant Agent as Agent Brain (FastAPI)
     participant Data as Knowledge Base (Qdrant)
 
     User->>UI: Asks Question

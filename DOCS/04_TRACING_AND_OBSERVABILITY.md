@@ -1,5 +1,7 @@
 # 🕵️ Tracing & Observability
 
+> ✅ **Current (partial).** Logfire spans are emitted across ingestion and every agent node; LangSmith env vars are set in `app/config.py` (enable with `LOGFIRE_TOKEN`). Last updated 2026-09-14.
+
 In an Agentic system, "Why did the AI say that?" is the most important question. We use a dual-tracing strategy to provide total transparency into the agent's thought process.
 
 ---

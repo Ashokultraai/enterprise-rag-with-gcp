@@ -1,5 +1,7 @@
 # Transition to Microservices & Infrastructure as Code (IaC)
 
+> 🚧 **Roadmap — not yet implemented.** The system currently runs as a two-container Docker Compose app (or a single Streamlit container on Hugging Face Spaces); this microservices/IaC design is not built. Kept as design reference — see the [root README](../README.md).
+
 This document outlines the limitations of our current "Monolithic" RAG architecture and provides a roadmap for transitioning to a scalable, event-driven microservices architecture managed by Terraform.
 
 ---

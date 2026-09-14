@@ -1,5 +1,7 @@
 # 15 — NeMo Guardrails
 
+> 🚧 **Roadmap — NeMo not implemented.** The running guardrail is a lightweight LLM node (`app/agents/nodes/guardrail.py`) using Groq `gpt-oss-20b`, not NeMo Guardrails/Colang. Kept as design reference — see the [root README](../README.md).
+
 > **One-line summary:** Guardrails are a safety + control layer that sits between the user and the LLM — they decide what the LLM is allowed to see, say, and do.
 
 ---

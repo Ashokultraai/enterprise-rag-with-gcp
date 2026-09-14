@@ -1,5 +1,7 @@
 # GCP Permissions & Services Reference
 
+> ⚠️ **Superseded — GCP design.** No longer applies; the project runs with no GCP services or permissions. Kept for historical reference only — see the [root README](../README.md).
+
 Complete reference of every GCP service and IAM role used in this project — what it does, why it's needed, and when it's active.
 
 ---
