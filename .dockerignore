@@ -1,0 +1,13 @@
+enterprise_env/
+local_store/
+DATA/
+.git/
+.logfire/
+__pycache__/
+**/__pycache__/
+*.pyc
+*.pyo
+.env
+notebooks/
+*.md
+DOCS/

@@ -19,8 +19,11 @@ class Settings:
     QDRANT_COLLECTION = "enterprise_rag"
 
     # --- REASONING ENGINE (GROQ) ---
+    # NOTE: Groq retired the Llama 3.x models; these are current as of 2026-09.
+    # Check https://console.groq.com/docs/models if a call 404s (model_not_found).
     GROQ_API_KEY = os.getenv("GROQ_API_KEY")
-    GROQ_MODEL = "llama-3.3-70b-versatile"
+    GROQ_MODEL = os.getenv("GROQ_MODEL", "openai/gpt-oss-120b")       # heavy: answer synthesis
+    GROQ_FAST_MODEL = os.getenv("GROQ_FAST_MODEL", "openai/gpt-oss-20b")  # light: planner/guardrail/grader
     GROQ_FALLBACK_API_KEY = os.getenv("GROQ_FALLBACK_API_KEY")
 
     # --- LLM GATEWAY (PORTKEY) ---

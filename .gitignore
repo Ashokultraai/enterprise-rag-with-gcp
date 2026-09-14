@@ -1,2 +1,5 @@
 .env
 local_store/
+__pycache__/
+*.pyc
+*.pyo

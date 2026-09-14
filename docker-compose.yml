@@ -1,0 +1,26 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    env_file: .env               # Qdrant + Groq keys
+    ports:
+      - "8000:8000"
+    volumes:
+      - model_cache:/models/hf   # persist embedding model weights across restarts
+    restart: unless-stopped
+
+  ui:
+    build:
+      context: .
+      dockerfile: Dockerfile.ui
+    environment:
+      - API_URL=http://api:8000  # reach the API by service name on the compose network
+    ports:
+      - "8501:8501"
+    depends_on:
+      - api
+    restart: unless-stopped
+
+volumes:
+  model_cache:

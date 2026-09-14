@@ -1,0 +1,12 @@
+# Runtime deps for the query app (Streamlit + LangGraph agent, in-process).
+# Trimmed from requirements.txt — no GCP, no ingestion/office parsers, no evals.
+streamlit
+langgraph
+langchain-core
+langchain-groq
+qdrant-client
+sentence-transformers        # local embeddings (pulls torch)
+flashrank                    # local cross-encoder reranking
+python-dotenv
+logfire
+requests
