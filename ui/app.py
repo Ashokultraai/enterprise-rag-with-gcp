@@ -20,10 +20,17 @@ API_URL = os.getenv("API_URL", "http://localhost:8000")
 USE_LOCAL_GRAPH = os.getenv("USE_LOCAL_GRAPH", "1").lower() in ("1", "true", "yes")
 
 
+@st.cache_resource(show_spinner="Warming up the model (first load only)…")
+def _get_runner():
+    """Import + build the agent once, shared across reruns and sessions."""
+    from app.agents.graph import run_turn
+    return run_turn
+
+
 def get_answer(query: str, thread_id: str):
     """Return (answer, sources, plan) either in-process or via the HTTP API."""
     if USE_LOCAL_GRAPH:
-        from app.agents.graph import run_turn
+        run_turn = _get_runner()
         result = run_turn(query, thread_id)
         return (result.get("answer", ""),
                 result.get("sources", []),
@@ -50,7 +57,7 @@ if "messages" not in st.session_state:
 with st.sidebar:
     st.subheader("Session")
     st.code(st.session_state.thread_id, language=None)
-    if st.button("🔄 New conversation"):
+    if st.button("🔄 New conversation", key="new_conversation"):
         st.session_state.thread_id = str(uuid.uuid4())
         st.session_state.messages = []
         st.rerun()
@@ -69,29 +76,15 @@ for m in st.session_state.messages:
                 for step in m["plan"]:
                     st.markdown(f"- {step}")
 
-# --- new turn ---
+# --- new turn: compute, store, then rerun so the history loop renders it once ---
 if prompt := st.chat_input("Ask something..."):
     st.session_state.messages.append({"role": "user", "content": prompt})
-    with st.chat_message("user"):
-        st.markdown(prompt)
-
-    with st.chat_message("assistant"):
-        with st.spinner("Thinking..."):
-            try:
-                answer, sources, plan = get_answer(prompt, st.session_state.thread_id)
-            except Exception as e:
-                answer, sources, plan = f"⚠️ Error: {e}", [], []
-
-        st.markdown(answer)
-        if sources:
-            with st.expander("📚 Sources"):
-                for s in sources:
-                    st.markdown(f"- {s}")
-        if plan:
-            with st.expander("🧭 Agent plan"):
-                for step in plan:
-                    st.markdown(f"- {step}")
-
+    with st.spinner("Thinking..."):
+        try:
+            answer, sources, plan = get_answer(prompt, st.session_state.thread_id)
+        except Exception as e:
+            answer, sources, plan = f"⚠️ Error: {e}", [], []
     st.session_state.messages.append(
         {"role": "assistant", "content": answer, "sources": sources, "plan": plan}
     )
+    st.rerun()
