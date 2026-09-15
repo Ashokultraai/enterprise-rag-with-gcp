@@ -197,7 +197,7 @@ If both ran on the same key, a single eval run would rate-limit your live app mi
 
 ### Full Token Budget for This Eval Run (15 samples)
 
-#### Phase 1 — Response Generation (`GROQ_API_KEY`, llama-3.3-70b-versatile via Portkey)
+#### Phase 1 — Response Generation (`GROQ_API_KEY`, gpt-oss-120b via Portkey)
 
 | Task | Calls | Tokens/call | Total tokens |
 |------|-------|-------------|--------------|
@@ -205,9 +205,9 @@ If both ran on the same key, a single eval run would rate-limit your live app mi
 | 6 guardrails tests | 6 | ~500 | ~3,000 |
 | **Phase 1 total** | **21** | | **~30,750** |
 
-With 10s delay between calls: ~3.5 min. Daily limit for 70b: 100,000 TPD ✅
+With 10s delay between calls: ~3.5 min. Daily limit for gpt-oss-120b: 100,000 TPD ✅
 
-#### Phase 2 — RAGAS Metrics (`JUDGE_GROQ`, llama-3.1-8b-instant)
+#### Phase 2 — RAGAS Metrics (`JUDGE_GROQ`, gpt-oss-20b)
 
 **Actual TPM tier: 6,000 on_demand** (not 14,400 — confirmed from live 413/429 errors).
 

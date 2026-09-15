@@ -478,8 +478,8 @@ def guard(message: str) -> tuple[bool, str | None]:
 ```
 
 Two models are used deliberately:
-- `llama-3.1-8b-instant` for the guardrail gate — fast, cheap, only doing intent classification
-- `llama-3.3-70b-versatile` for the RAG pipeline — stays for generation quality
+- `gpt-oss-20b` for the guardrail gate — fast, cheap, only doing intent classification
+- `gpt-oss-120b` for the RAG pipeline — stays for generation quality
 
 ---
 
@@ -520,4 +520,4 @@ The `thought_process` field mirrors the planner's existing pattern:
 | Greeting / memory | `["Intent: Conversational/Memory", "Retrieval: Skipped"]` |
 | Rail fired | `["Intent: Guardrails Fired", "Retrieval: Skipped"]` |
 
-When a rail fires, Qdrant, FlashRank, and the 70B model are **never called** — the request is rejected at the gate in milliseconds.
+When a rail fires, Qdrant, FlashRank, and the gpt-oss-120b model are **never called** — the request is rejected at the gate in milliseconds.

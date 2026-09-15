@@ -53,10 +53,10 @@ flowchart TD
     C -- Cache HIT --> R([Return cached\nresponse instantly\n$0.00])
     C -- Cache MISS --> D[Apply config rules\nretry · timeout · routing]
     D --> E{Routing Strategy}
-    E -- Fallback --> F1[Primary Provider\nGroq llama-3.3-70b]
+    E -- Fallback --> F1[Primary Provider\nGroq gpt-oss-120b]
     E -- Load Balance --> F1
     F1 -- Success --> G[Log request\n+ response]
-    F1 -- Fail/Timeout --> F2[Fallback Provider\nGroq llama-3.1-8b]
+    F1 -- Fail/Timeout --> F2[Fallback Provider\nGroq gpt-oss-20b]
     F2 --> G
     G --> H[Store in cache\nif cacheable]
     H --> R2([Return to App])
@@ -109,7 +109,7 @@ from portkey_ai import Portkey
 portkey = Portkey(api_key=PORTKEY_API_KEY)
 
 response = portkey.chat.completions.create(
-    model="@flight-policsy/llama-3.3-70b-versatile",
+    model="@flight-policsy/gpt-oss-120b",
     messages=[{"role": "user", "content": "What is Kubernetes?"}]
 )
 ```
@@ -220,8 +220,8 @@ If the primary model fails (any non-2xx), Portkey automatically switches to the 
 portkey = Portkey(api_key=PORTKEY_API_KEY, config={
     "strategy": {"mode": "fallback"},
     "targets": [
-        {"override_params": {"model": "@flight-policsy/llama-3.3-70b-versatile"}},  # primary
-        {"override_params": {"model": "@flight-policy/llama-3.1-8b-instant"}}       # fallback
+        {"override_params": {"model": "@flight-policsy/gpt-oss-120b"}},  # primary
+        {"override_params": {"model": "@flight-policy/gpt-oss-20b"}}       # fallback
     ]
 })
 ```
@@ -229,9 +229,9 @@ portkey = Portkey(api_key=PORTKEY_API_KEY, config={
 ```mermaid
 flowchart LR
     A([Request]) --> B[Portkey]
-    B --> C[Primary\nllama-3.3-70b]
+    B --> C[Primary\ngpt-oss-120b]
     C -- 2xx Success --> E([Response])
-    C -- 4xx / 5xx --> D[Fallback\nllama-3.1-8b]
+    C -- 4xx / 5xx --> D[Fallback\ngpt-oss-20b]
     D --> E
     style C fill:#5cb85c,color:#fff
     style D fill:#d9534f,color:#fff
@@ -253,16 +253,16 @@ Split traffic between models by weight. Each request is routed probabilistically
 portkey = Portkey(api_key=PORTKEY_API_KEY, config={
     "strategy": {"mode": "loadbalance"},
     "targets": [
-        {"override_params": {"model": "@flight-policsy/llama-3.3-70b-versatile"}, "weight": 0.7},
-        {"override_params": {"model": "@flight-policy/llama-3.1-8b-instant"},     "weight": 0.3}
+        {"override_params": {"model": "@flight-policsy/gpt-oss-120b"}, "weight": 0.7},
+        {"override_params": {"model": "@flight-policy/gpt-oss-20b"},     "weight": 0.3}
     ]
 })
 ```
 
 ```mermaid
 pie title Traffic Distribution
-    "Large model (70b)" : 70
-    "Small model (8b)" : 30
+    "Large model (120b)" : 70
+    "Small model (20b)" : 30
 ```
 
 **Use cases:**
@@ -371,13 +371,13 @@ from langchain_openai import ChatOpenAI
 from portkey_ai import createHeaders, PORTKEY_GATEWAY_URL
 
 # Before (direct Groq)
-llm = ChatGroq(api_key=GROQ_API_KEY, model="llama-3.3-70b-versatile")
+llm = ChatGroq(api_key=GROQ_API_KEY, model="gpt-oss-120b")
 
 # After (Portkey gateway — everything else unchanged)
 llm = ChatOpenAI(
     api_key=PORTKEY_API_KEY,
     base_url=PORTKEY_GATEWAY_URL,
-    model="@flight-policsy/llama-3.3-70b-versatile",
+    model="@flight-policsy/gpt-oss-120b",
     default_headers=createHeaders(
         api_key=PORTKEY_API_KEY,
         metadata={"feature": "rag-pipeline", "_user": "system"}
@@ -403,8 +403,8 @@ PRODUCTION_CONFIG = {
     },
     "cache": {"mode": "simple"},
     "targets": [
-        {"override_params": {"model": "@flight-policsy/llama-3.3-70b-versatile"}},
-        {"override_params": {"model": "@flight-policy/llama-3.1-8b-instant"}}
+        {"override_params": {"model": "@flight-policsy/gpt-oss-120b"}},
+        {"override_params": {"model": "@flight-policy/gpt-oss-20b"}}
     ]
 }
 
@@ -417,10 +417,10 @@ flowchart TD
     B --> C{Cache?}
     C -- HIT --> Z([Instant response\n0 tokens])
     C -- MISS --> D[Apply timeout 30s]
-    D --> E[Primary\nllama-3.3-70b]
+    D --> E[Primary\ngpt-oss-120b]
     E -- Success --> F[Log + Cache]
     E -- Fail/429/503 --> G[Retry up to 2x]
-    G -- Still fail --> H[Fallback\nllama-3.1-8b]
+    G -- Still fail --> H[Fallback\ngpt-oss-20b]
     H --> F
     F --> Z2([Response to app])
 
@@ -458,7 +458,7 @@ from langchain_openai import ChatOpenAI
 gateway_llm = ChatOpenAI(
     api_key=PORTKEY_API_KEY,
     base_url=PORTKEY_GATEWAY_URL,
-    model="@flight-policsy/llama-3.3-70b-versatile",
+    model="@flight-policsy/gpt-oss-120b",
     default_headers=createHeaders(
         api_key=PORTKEY_API_KEY,
         config=PRODUCTION_CONFIG,
@@ -579,8 +579,8 @@ GATEWAY_CONFIG = {
         "on_status_codes": [429, 503]   # retry before triggering the fallback
     },
     "targets": [
-        {"override_params": {"model": "@rag/llama-3.3-70b-versatile"}},    # primary
-        {"override_params": {"model": "@brag/llama-3.1-8b-instant"}},      # fallback
+        {"override_params": {"model": "@rag/gpt-oss-120b"}},    # primary
+        {"override_params": {"model": "@brag/gpt-oss-20b"}},      # fallback
     ]
 }
 ```
