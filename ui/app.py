@@ -5,10 +5,19 @@ import uuid
 import requests
 import streamlit as st
 
+# On Streamlit Community Cloud, config comes from st.secrets. Copy those into the
+# environment so app.config (which reads os.getenv) and the agent pick them up.
+try:
+    for _k, _v in st.secrets.items():
+        os.environ.setdefault(_k, str(_v))
+except Exception:
+    pass
+
 API_URL = os.getenv("API_URL", "http://localhost:8000")
-# In-process mode: run the LangGraph agent inside Streamlit (no separate API).
-# Used on Hugging Face Spaces (set USE_LOCAL_GRAPH=1) so a single container serves everything.
-USE_LOCAL_GRAPH = os.getenv("USE_LOCAL_GRAPH", "").lower() in ("1", "true", "yes")
+# Run the agent INSIDE Streamlit by default (no separate API server needed) — this
+# is what makes a single-container / Streamlit Cloud deploy work. Set USE_LOCAL_GRAPH=0
+# only when you deliberately want the UI to call a separate FastAPI backend.
+USE_LOCAL_GRAPH = os.getenv("USE_LOCAL_GRAPH", "1").lower() in ("1", "true", "yes")
 
 
 def get_answer(query: str, thread_id: str):
