@@ -18,6 +18,21 @@ try:
 except Exception:
     pass
 
+# Observability: configure Logfire once per process (Streamlit re-runs the script
+# on every interaction, so guard with an env flag). Only ships to the Logfire cloud
+# when LOGFIRE_TOKEN is set; otherwise it's a harmless local no-op. The FastAPI
+# entrypoint configures its own; the in-process UI needs its own call.
+if not os.environ.get("_LOGFIRE_CONFIGURED"):
+    try:
+        import logfire
+        logfire.configure(
+            service_name="enterprise-rag-ui",
+            send_to_logfire=bool(os.getenv("LOGFIRE_TOKEN")),
+        )
+        os.environ["_LOGFIRE_CONFIGURED"] = "1"
+    except Exception:
+        pass
+
 API_URL = os.getenv("API_URL", "http://localhost:8000")
 # Run the agent INSIDE Streamlit by default (no separate API server needed) — this
 # is what makes a single-container / Streamlit Cloud deploy work. Set USE_LOCAL_GRAPH=0
