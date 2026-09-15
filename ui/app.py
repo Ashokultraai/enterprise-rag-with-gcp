@@ -91,6 +91,9 @@ with st.sidebar:
         st.session_state.messages = []
         st.rerun()
     st.caption("Mode: in-process agent" if USE_LOCAL_GRAPH else f"API: {API_URL}")
+    # Diagnostic: show whether LangSmith tracing is actually active at runtime.
+    _ls_on = os.getenv("LANGSMITH_TRACING") == "true" and bool(os.getenv("LANGSMITH_API_KEY"))
+    st.caption(f"LangSmith: on → {os.getenv('LANGSMITH_PROJECT', '?')}" if _ls_on else "LangSmith: off")
 
 # --- replay history ---
 for m in st.session_state.messages:
