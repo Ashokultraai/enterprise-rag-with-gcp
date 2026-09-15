@@ -20,10 +20,14 @@ API_URL = os.getenv("API_URL", "http://localhost:8000")
 USE_LOCAL_GRAPH = os.getenv("USE_LOCAL_GRAPH", "1").lower() in ("1", "true", "yes")
 
 
-@st.cache_resource(show_spinner="Warming up the model (first load only)…")
+@st.cache_resource(show_spinner="Loading the model — first visit only, ~1 minute…")
 def _get_runner():
-    """Import + build the agent once, shared across reruns and sessions."""
+    """Import the agent and warm the embedding model ONCE, under the cache lock,
+    so no chat message ever triggers a long blocking load mid-render (which is what
+    makes Streamlit re-run the script and duplicate widgets)."""
     from app.agents.graph import run_turn
+    from app.services.retrieval.embedding import get_embedding_model
+    get_embedding_model()  # force the heavy one-time load now
     return run_turn
 
 
@@ -47,6 +51,11 @@ def get_answer(query: str, thread_id: str):
 st.set_page_config(page_title="Enterprise RAG", page_icon="🧠", layout="centered")
 st.title("🧠 Enterprise RAG Assistant")
 st.caption("Ask a technical question, or just say hi. Powered by LangGraph + Qdrant + Groq.")
+
+# Warm the model at startup (cached, once) so message handling is always fast and
+# never blocks long enough to make Streamlit re-run the script.
+if USE_LOCAL_GRAPH:
+    _get_runner()
 
 # --- session state ---
 if "thread_id" not in st.session_state:
