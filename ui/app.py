@@ -1,6 +1,11 @@
 """Streamlit chat frontend for the Enterprise RAG agent."""
 import os
+import sys
 import uuid
+
+# Streamlit runs this file from the ui/ folder, so the repo root (where the backend
+# `app` package lives) isn't on the import path. Add it so `import app...` resolves.
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import requests
 import streamlit as st
