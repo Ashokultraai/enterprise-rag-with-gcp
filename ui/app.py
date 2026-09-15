@@ -91,18 +91,6 @@ with st.sidebar:
         st.session_state.messages = []
         st.rerun()
     st.caption("Mode: in-process agent" if USE_LOCAL_GRAPH else f"API: {API_URL}")
-    # Diagnostic: show whether LangSmith tracing is actually active at runtime,
-    # plus a MASKED key prefix + endpoint so we can confirm *which* key/region
-    # the deployed app actually loaded (catches a stale secret shadowing a new key).
-    _ls_key = os.getenv("LANGSMITH_API_KEY") or os.getenv("LANGCHAIN_API_KEY")
-    _ls_on = os.getenv("LANGSMITH_TRACING") == "true" and bool(_ls_key)
-    if _ls_on:
-        _prefix = (_ls_key[:11] + "…") if _ls_key else "?"
-        _endpoint = os.getenv("LANGSMITH_ENDPOINT", "?")
-        st.caption(f"LangSmith: on → {os.getenv('LANGSMITH_PROJECT', '?')}")
-        st.caption(f"key {_prefix} · {_endpoint}")
-    else:
-        st.caption("LangSmith: off")
 
 # --- replay history ---
 for m in st.session_state.messages:
