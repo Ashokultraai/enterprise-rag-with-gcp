@@ -38,10 +38,19 @@ class Settings:
     LANGSMITH_PROJECT = os.getenv("LANGSMITH_PROJECT", "rag_scale_test")
     LANGSMITH_ENDPOINT = os.getenv("LANGSMITH_ENDPOINT", "https://api.smith.langchain.com")
 
-# Apply LangChain environment variables for automatic tracing
-os.environ["LANGCHAIN_TRACING_V2"] = os.getenv("LANGSMITH_TRACING", "true")
-os.environ["LANGCHAIN_API_KEY"] = os.getenv("LANGSMITH_API_KEY", "")
-os.environ["LANGCHAIN_PROJECT"] = os.getenv("LANGSMITH_PROJECT", "rag_scale_test")
-os.environ["LANGCHAIN_ENDPOINT"] = os.getenv("LANGSMITH_ENDPOINT", "https://api.smith.langchain.com")
+# Enable LangSmith tracing. Set BOTH the modern LANGSMITH_* and the legacy
+# LANGCHAIN_* names so any SDK version picks it up (newer SDKs read LANGSMITH_*,
+# older ones LANGCHAIN_*). Only turn tracing ON when an API key is actually
+# present, to avoid noisy failures when it isn't configured.
+_ls_key = os.getenv("LANGSMITH_API_KEY", "")
+_ls_on = "true" if _ls_key else "false"
+_ls_project = os.getenv("LANGSMITH_PROJECT", "enterprise-rag")
+_ls_endpoint = os.getenv("LANGSMITH_ENDPOINT", "https://api.smith.langchain.com")
+for _prefix in ("LANGSMITH", "LANGCHAIN"):
+    os.environ[f"{_prefix}_API_KEY"] = _ls_key
+    os.environ[f"{_prefix}_PROJECT"] = _ls_project
+    os.environ[f"{_prefix}_ENDPOINT"] = _ls_endpoint
+os.environ["LANGSMITH_TRACING"] = _ls_on
+os.environ["LANGCHAIN_TRACING_V2"] = _ls_on
 
 settings = Settings()
