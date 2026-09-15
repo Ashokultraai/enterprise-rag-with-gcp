@@ -42,12 +42,18 @@ class Settings:
 # LANGCHAIN_* names so any SDK version picks it up (newer SDKs read LANGSMITH_*,
 # older ones LANGCHAIN_*). Only turn tracing ON when an API key is actually
 # present, to avoid noisy failures when it isn't configured.
-_ls_key = os.getenv("LANGSMITH_API_KEY", "")
+#
+# Accept the key under EITHER env name — some setups store the secret as
+# LANGCHAIN_API_KEY. And NEVER overwrite a real key with an empty string
+# (an earlier version of this block wiped LANGCHAIN_API_KEY when only
+# LANGSMITH_API_KEY was checked, which silently disabled tracing).
+_ls_key = os.getenv("LANGSMITH_API_KEY") or os.getenv("LANGCHAIN_API_KEY") or ""
 _ls_on = "true" if _ls_key else "false"
-_ls_project = os.getenv("LANGSMITH_PROJECT", "enterprise-rag")
-_ls_endpoint = os.getenv("LANGSMITH_ENDPOINT", "https://api.smith.langchain.com")
+_ls_project = os.getenv("LANGSMITH_PROJECT") or os.getenv("LANGCHAIN_PROJECT") or "enterprise-rag"
+_ls_endpoint = os.getenv("LANGSMITH_ENDPOINT") or os.getenv("LANGCHAIN_ENDPOINT") or "https://api.smith.langchain.com"
 for _prefix in ("LANGSMITH", "LANGCHAIN"):
-    os.environ[f"{_prefix}_API_KEY"] = _ls_key
+    if _ls_key:  # don't clobber a present key with ""
+        os.environ[f"{_prefix}_API_KEY"] = _ls_key
     os.environ[f"{_prefix}_PROJECT"] = _ls_project
     os.environ[f"{_prefix}_ENDPOINT"] = _ls_endpoint
 os.environ["LANGSMITH_TRACING"] = _ls_on
