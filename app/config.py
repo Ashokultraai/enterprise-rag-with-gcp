@@ -26,10 +26,10 @@ class Settings:
     GROQ_FAST_MODEL = os.getenv("GROQ_FAST_MODEL", "openai/gpt-oss-20b")  # light: planner/guardrail/grader
     GROQ_FALLBACK_API_KEY = os.getenv("GROQ_FALLBACK_API_KEY")
 
-    # --- LLM GATEWAY (PORTKEY) ---
+    # --- LLM GATEWAY (PORTKEY) — optional seam, inactive unless PORTKEY_API_KEY is set ---
     PORTKEY_API_KEY = os.getenv("PORTKEY_API_KEY")
-    GROQ_SLUG =  "rag"     # primary: @rag/llama-3.3-70b-versatile
-    GROQ_SLUG_2 = "brag"  # fallback: @brag/llama-3.1-8b-instant
+    GROQ_SLUG =  "rag"     # primary slug -> @rag/<GROQ_MODEL> (e.g. openai/gpt-oss-120b on Groq)
+    GROQ_SLUG_2 = "brag"  # fallback slug -> @brag/<GROQ_FAST_MODEL> (e.g. openai/gpt-oss-20b on Groq)
 
     
     # --- OBSERVABILITY ---

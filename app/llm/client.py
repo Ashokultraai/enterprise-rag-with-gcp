@@ -16,9 +16,11 @@ def get_llm(temperature: float = 0.1, fast: bool = False):
     """
     Return a chat LLM.
 
-    fast=False -> heavy model (llama-3.3-70b) for final answer synthesis.
-    fast=True  -> light model (llama-3.1-8b) for planner / guardrail / grader,
-                  which only need cheap classification / short JSON.
+    fast=False -> heavy model (settings.GROQ_MODEL, e.g. openai/gpt-oss-120b on
+                  Groq) for final answer synthesis.
+    fast=True  -> light model (settings.GROQ_FAST_MODEL, e.g. openai/gpt-oss-20b
+                  on Groq) for planner / guardrail / grader, which only need
+                  cheap classification / short JSON.
     """
     model = settings.GROQ_FAST_MODEL if fast else settings.GROQ_MODEL
 

@@ -15,9 +15,11 @@ The project uses a `.env` file for local development and **GCP Secrets/Env Vars*
 ## 🧠 AI & LLM (The Brain)
 | Variable | Description | Example |
 | :--- | :--- | :--- |
-| `GROQ_API_KEY` | Key for Llama 3.3 models | `gsk_...` |
-| `GROQ_MODEL` | Specific model version | `llama-3.3-70b-versatile` |
-| `GCP_DOC_AI_PROCESSOR_ID` | ID of the OCR parser | `786e...` |
+| `GROQ_API_KEY` | Groq API key — powers the reasoning engine (NOT an OpenAI key) | `gsk_...` |
+| `GROQ_MODEL` | Heavy model for answer synthesis (Groq) | `openai/gpt-oss-120b` |
+| `GROQ_FAST_MODEL` | Light model for planner / guardrail / grader (Groq) | `openai/gpt-oss-20b` |
+
+> **The reasoning engine is Groq — no OpenAI key is needed.** The `openai/` in the model IDs is just Groq's naming for OpenAI's *open-weight* `gpt-oss` models, which run **on Groq's servers** via `GROQ_API_KEY`. (Groq retired the older `llama-3.3-70b-versatile` / `llama-3.1-8b-instant` models; `gpt-oss-120b` / `gpt-oss-20b` replaced them.)
 
 ## 📥 Ingestion & Storage
 | Variable | Description | Example |
