@@ -19,6 +19,9 @@ langchain-groq
 langchain-openai          # only used by the optional Portkey gateway seam
 portkey-ai                # optional LLM gateway (activates when PORTKEY_API_KEY is set)
 
+# --- Guardrails ---
+nemoguardrails            # primary input gate (Colang "self check input"); LLM node is the fallback
+
 # --- Retrieval stack (all local/free) ---
 sentence-transformers     # local embeddings (pulls torch)
 qdrant-client             # vector database client

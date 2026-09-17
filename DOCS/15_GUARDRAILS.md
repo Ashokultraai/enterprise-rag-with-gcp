@@ -1,6 +1,6 @@
 # 15 — NeMo Guardrails
 
-> 🚧 **Roadmap — NeMo not implemented.** The running guardrail is a lightweight LLM node (`app/agents/nodes/guardrail.py`) using Groq `gpt-oss-20b`, not NeMo Guardrails/Colang. Kept as design reference — see the [root README](../README.md).
+> ✅ **Partially implemented.** NeMo Guardrails now runs as the **primary input gate** — the Colang "self check input" rail in `app/agents/nemo_rails/`, wired via `app/agents/nodes/nemo_guard.py`, with the lightweight LLM node (`app/agents/nodes/guardrail.py`) as the fallback (`GUARDRAIL_ENGINE=llm` forces it). The *fuller* design described below (dialog rails, PII rails, output rails, Colang flows beyond input) is still aspirational. See the [root README](../README.md).
 
 > **One-line summary:** Guardrails are a safety + control layer that sits between the user and the LLM — they decide what the LLM is allowed to see, say, and do.
 

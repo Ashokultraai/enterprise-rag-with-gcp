@@ -1,0 +1,9 @@
+# Colang rules for the input gate.
+#
+# The "self check input" flow (used in config.yml) is provided by the NeMo
+# library. When it decides to block, it calls "bot refuse to respond" and stops.
+# We override that bot message here so a blocked message returns OUR wording
+# (kept consistent with the responder's _BLOCKED_MSG).
+
+define bot refuse to respond
+  "I can't help with that request. I'm an enterprise technical assistant — feel free to ask me about the topics in the knowledge base."

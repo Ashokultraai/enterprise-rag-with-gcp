@@ -26,7 +26,7 @@ For the authoritative description of what actually runs today, see the **[root R
 | 12 | [Known Gotchas](12_KNOWN_GOTCHAS.md) | ⚠️ Partial | Many gotchas were GCP-specific |
 | 13 | [FlashRank Reranking](13_FLASHRANK_RERANKING.md) | ✅ Current | Local cross-encoder reranker |
 | 14 | [VPC Networking](14_VPC_NETWORKING.md) | ⚠️ Superseded | GCP VPC connectors |
-| 15 | [Guardrails](15_GUARDRAILS.md) | 🚧 Roadmap | NeMo planned; running node is a lightweight LLM gate |
+| 15 | [Guardrails](15_GUARDRAILS.md) | ✅ Partial | NeMo input gate live (self check input); LLM node is fallback. Fuller dialog/PII/output rails still planned |
 | 16 | [LLM Gateway](16_LLM_GATEWAY.md) | 🚧 Roadmap | Portkey seam exists; calls go direct to Groq today |
 | 17 | [Evals](17_EVALS.md) | 🚧 Roadmap | RAGAS metrics theory |
 | 18 | [Evals Pipeline](18_EVALS_PIPELINE.md) | 🚧 Roadmap | Eval pipeline not wired up |

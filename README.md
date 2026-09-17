@@ -39,7 +39,7 @@ graph TD
 
 | Node | Model | Job |
 |------|-------|-----|
-| 🛡️ **Guardrail** | Groq `gpt-oss-20b` | Blocks jailbreaks / unsafe / off-scope input (fail-open). |
+| 🛡️ **Guardrail** | **NeMo Guardrails** (Colang) → Groq `gpt-oss-20b` | Blocks jailbreaks / unsafe / secret-exfil input. NeMo's "self check input" rail is **primary**; the lightweight Groq gate is the **fallback** (both fail-open). |
 | 🧭 **Planner** | Groq `gpt-oss-20b` | Routes `conversational` vs `technical`; emits an optimized, history-aware search query. |
 | 🔍 **Retriever** | — | Qdrant cosine search (top 15) → FlashRank cross-encoder rerank (top 5). |
 | ⚖️ **Grader** | Groq `gpt-oss-20b` | Grades context relevance; **rewrites & retries once**, then gives up gracefully. Trusts strong retrieval scores. |
@@ -79,8 +79,10 @@ app/
 ├── agents/
 │   ├── state.py                  # AgentState (messages accumulate via reducer)
 │   ├── graph.py                  # build_graph(), run_turn(), compiled `agent`
+│   ├── nemo_rails/               # NeMo Guardrails config (config.yml, prompts.yml, rails.co)
 │   └── nodes/
-│       ├── guardrail.py          # input safety/scope gate
+│       ├── guardrail.py          # input gate: NeMo primary, LLM fallback
+│       ├── nemo_guard.py         # NeMo "self check input" wrapper
 │       ├── planner.py            # router + query optimizer
 │       ├── retriever.py          # Qdrant search + FlashRank rerank
 │       ├── grader.py             # relevance grade + self-correction loop
@@ -128,6 +130,7 @@ QDRANT_CLUSTER_ENDPOINT="https://<cluster>.cloud.qdrant.io"
 GROQ_MODEL="openai/gpt-oss-120b"
 GROQ_FAST_MODEL="openai/gpt-oss-20b"
 LOGFIRE_TOKEN="..."               # optional observability
+GUARDRAIL_ENGINE="nemo"           # "nemo" (default) or "llm" to force the fallback gate
 ```
 > Groq retires models periodically. If a call returns `model_not_found`, pick a current one from https://console.groq.com/docs/models and set `GROQ_MODEL` / `GROQ_FAST_MODEL`.
 
@@ -173,17 +176,17 @@ Implemented and verified end-to-end:
 - ✅ Local ingestion (pypdf/office/html/text → chunk → **local** embeddings → Qdrant)
 - ✅ Two-stage retrieval (Qdrant + FlashRank)
 - ✅ Full LangGraph agent: guardrail · planner · retriever · grader/self-correction · responder
+- ✅ **NeMo Guardrails** input gate (Colang "self check input") as the primary guardrail, with the lightweight LLM node as fallback (`GUARDRAIL_ENGINE=llm` forces it)
 - ✅ FastAPI backend + Streamlit UI (HTTP and in-process modes)
 - ✅ Docker Compose + Hugging Face Space packaging
 
 **Roadmap / not yet wired in** (the `DOCS/` folder describes the original, broader design vision — parts of it are aspirational or were intentionally superseded when the project migrated off GCP to a local-first stack):
 - ⏳ Portkey LLM gateway — code seam exists in `get_llm()`, activates when `PORTKEY_API_KEY` is set
-- ⏳ NeMo Guardrails — currently a lightweight LLM-based guardrail node instead
 - ⏳ Redis-backed conversation memory (currently in-process `MemorySaver`)
 - ⏳ RAGAS evaluation suite
 - ⏳ GCP deployment — **removed**; replaced by local embeddings + Docker/HF Spaces
 
-> **Note on `DOCS/`:** these are the original architecture blueprints written before the local-first migration. They still reference Vertex AI embeddings, Document AI, GCP Cloud Run, and an active Portkey/NeMo setup. Treat them as design background; this README reflects the code as it actually runs today.
+> **Note on `DOCS/`:** these are the original architecture blueprints written before the local-first migration. They still reference Vertex AI embeddings, Document AI, GCP Cloud Run, an active Portkey gateway, and a fuller NeMo/Colang dialog system (PII rails, output rails, etc.) than the input-gate that ships today. Treat them as design background; this README reflects the code as it actually runs today.
 
 ---
 

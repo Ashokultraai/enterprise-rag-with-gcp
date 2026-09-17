@@ -1,0 +1,15 @@
+# NeMo Guardrails config for the enterprise RAG input gate.
+#
+# We only use INPUT rails here — NeMo decides whether the user's message is
+# allowed BEFORE our LangGraph agent runs. Dialog/output/retrieval rails are
+# intentionally left off: answer generation is handled by our own agent, not NeMo.
+#
+# The main LLM is injected from Python (app/agents/nodes/nemo_guard.py passes our
+# existing Groq client), so there is deliberately no `models:` section here.
+
+colang_version: "1.0"
+
+rails:
+  input:
+    flows:
+      - self check input

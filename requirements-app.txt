@@ -4,6 +4,7 @@ streamlit
 langgraph
 langchain-core
 langchain-groq
+nemoguardrails               # primary input guardrail (falls back to the LLM gate if absent)
 qdrant-client
 sentence-transformers        # local embeddings (pulls torch)
 flashrank                    # local cross-encoder reranking
